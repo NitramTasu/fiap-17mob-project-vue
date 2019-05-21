@@ -43,7 +43,7 @@
       </md-card>
 
       <md-snackbar
-        :md-active.sync="userSaved"
+        :md-active.sync="userLogged"
       >Usuário {{ $v.form.email.email }} logado com sucesso!!</md-snackbar>
     </form>
   </div>
@@ -51,12 +51,14 @@
 
 <script>
 import { validationMixin } from "vuelidate";
+import firebase from "firebase";
 import {
   required,
   email,
   minLength,
   maxLength
 } from "vuelidate/lib/validators";
+import { debug } from "util";
 
 export default {
   name: "FormValidation",
@@ -66,7 +68,7 @@ export default {
       password: null,
       email: null
     },
-    userSaved: false,
+    userLogged: false,
     sending: false,
     lastUser: null
   }),
@@ -99,14 +101,19 @@ export default {
     },
     saveUser() {
       this.sending = true;
-
-      // Instead of this timeout, here you can call your API
-      window.setTimeout(() => {
-        //this.lastUser = `${this.form.firstName} ${this.form.lastName}`;
-        this.userSaved = true;
-        this.sending = false;
-        this.clearForm();
-      }, 1500);
+      debugger;
+      firebase
+        .auth()
+        .signInWithEmailAndPassword(this.form.email, this.form.password)
+        .then(function(firebaseUser) {
+          this.userLogged = true;
+          this.sending = false;
+          this.clearForm();
+          console.log("Logado com sucesso");
+        })
+        .catch(function(error) {
+          console.error(error);
+        });
     },
     validateUser() {
       this.$v.$touch();
