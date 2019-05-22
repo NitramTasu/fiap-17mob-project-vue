@@ -101,13 +101,13 @@ export default {
     },
     saveUser() {
       this.sending = true;
-      debugger;
+      var self = this;
       firebase
         .auth()
         .signInWithEmailAndPassword(this.form.email, this.form.password)
-        .then(function(firebaseUser) {
-          this.userLogged = true;
-          this.sending = false;
+        .then(firebaseUser => {
+          self.userLogged = true;
+          self.sending = false;
           this.clearForm();
           console.log("Logado com sucesso");
         })
