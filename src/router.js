@@ -1,10 +1,12 @@
 import Vue from "vue";
 import Router from "vue-router";
 import Home from "./views/Home.vue";
+import Firebase from "firebase/app";
+require("firebase/auth");
 
 Vue.use(Router);
 
-export default new Router({
+const router = new Router({
   mode: "history",
   base: process.env.BASE_URL,
   routes: [
@@ -27,11 +29,13 @@ export default new Router({
     {
       path: "/about",
       name: "about",
+      meta: {
+        requiresAuth: true
+      },
       // route level code-splitting
       // this generates a separate chunk (about.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () =>
-        import("./views/About.vue")
+      component: () => import("./views/About.vue")
     },
     {
       path: "/login",
@@ -45,3 +49,17 @@ export default new Router({
     }
   ]
 });
+
+router.beforeEach((to, from, next) => {
+  const currentUser = Firebase.auth().currentUser;
+  const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
+
+  console.log("a " + currentUser);
+  console.log("b " + requiresAuth);
+
+  if (requiresAuth && !currentUser) next("login");
+  else if (!requiresAuth && currentUser) next("home");
+  else next();
+});
+
+export default router;

@@ -6,6 +6,7 @@ import router from "./router";
 import store from "./store";
 import "./registerServiceWorker";
 import firebase from "firebase";
+require("firebase/auth");
 
 import VueMaterial from "vue-material";
 import "vue-material/dist/vue-material.min.css";

@@ -54,7 +54,8 @@
 
 <script>
 import { validationMixin } from "vuelidate";
-import firebase from "firebase";
+import firebase from "firebase/app";
+require("firebase/auth");
 import {
   required,
   email,
