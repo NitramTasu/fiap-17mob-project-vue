@@ -46,6 +46,9 @@
         :md-active.sync="userLogged"
       >Usuário {{ $v.form.email.email }} logado com sucesso!!</md-snackbar>
     </form>
+    <div>
+      <router-link to="/singup">Cadastro</router-link>
+    </div>
   </div>
 </template>
 
@@ -61,7 +64,7 @@ import {
 import { debug } from "util";
 
 export default {
-  name: "FormValidation",
+  name: "login",
   mixins: [validationMixin],
   data: () => ({
     form: {

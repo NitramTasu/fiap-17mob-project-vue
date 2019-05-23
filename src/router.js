@@ -9,9 +9,20 @@ export default new Router({
   base: process.env.BASE_URL,
   routes: [
     {
+      path: "*",
+      redirect: "/login"
+    },
+    {
       path: "/",
+      redirect: "/login"
+    },
+    {
+      path: "/home",
       name: "home",
-      component: Home
+      component: Home,
+      meta: {
+        requiresAuth: true
+      }
     },
     {
       path: "/about",
@@ -20,12 +31,17 @@ export default new Router({
       // this generates a separate chunk (about.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () =>
-        import(/* webpackChunkName: "about" */ "./views/About.vue")
+        import("./views/About.vue")
     },
     {
       path: "/login",
       name: "login",
       component: () => import("./views/Login.vue")
+    },
+    {
+      path: "/singup",
+      name: "singup",
+      component: () => import("./views/Signup.vue")
     }
   ]
 });
