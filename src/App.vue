@@ -38,9 +38,16 @@ export default {
   padding: 30px;
 }
 
-#nav a {
+#nav a,
+button {
   font-weight: bold;
   color: #2c3e50;
+}
+
+button {
+  background: none;
+  border: none;
+  padding: 0px;
 }
 
 #nav a.router-link-exact-active {
