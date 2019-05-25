@@ -38,6 +38,7 @@
         <md-progress-bar md-mode="indeterminate" v-if="sending"/>
 
         <md-card-actions>
+          <router-link to="/singup">Cadastrar</router-link>
           <md-button type="submit" class="md-primary" :disabled="sending">Logar</md-button>
         </md-card-actions>
       </md-card>
