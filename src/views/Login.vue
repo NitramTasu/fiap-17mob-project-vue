@@ -113,6 +113,7 @@ export default {
           self.userLogged = true;
           self.sending = false;
           this.clearForm();
+          this.$router.push("/home");
           console.log("Logado com sucesso");
         })
         .catch(function(error) {
