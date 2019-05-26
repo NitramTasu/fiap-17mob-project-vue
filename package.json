@@ -7,6 +7,7 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
+    "axios": "^0.18.0",
     "bootstrap-vue": "^2.0.0-rc.13",
     "core-js": "^2.6.5",
     "firebase": "^6.0.2",
@@ -15,7 +16,7 @@
     "vue-material": "^1.0.0-beta-11",
     "vue-router": "^3.0.3",
     "vuelidate": "^0.7.4",
-    "vuex": "^3.0.1"
+    "vuex": "^3.1.1"
   },
   "devDependencies": {
     "@babel/polyfill": "^7.2.5",

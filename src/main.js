@@ -7,12 +7,14 @@ import store from "./store";
 import "./registerServiceWorker";
 import firebase from "firebase";
 require("firebase/auth");
+import axios from "axios";
 
 import VueMaterial from "vue-material";
 import "vue-material/dist/vue-material.min.css";
 import "vue-material/dist/theme/default.css";
 
 Vue.config.productionTip = false;
+Vue.prototype.$http = axios;
 
 var config = {
   apiKey: "AIzaSyCCOJ2pcMGlxFiGisLXnIT9cbxwsB-UIHI",

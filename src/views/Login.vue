@@ -47,9 +47,6 @@
         :md-active.sync="userLogged"
       >Usuário {{ $v.form.email.email }} logado com sucesso!!</md-snackbar>
     </form>
-    <div>
-      <router-link to="/singup">Cadastro</router-link>
-    </div>
   </div>
 </template>
 
@@ -63,7 +60,7 @@ import {
   minLength,
   maxLength
 } from "vuelidate/lib/validators";
-import { debug } from "util";
+import { mapGetters, mapState } from "vuex";
 
 export default {
   name: "login",
@@ -88,6 +85,11 @@ export default {
       }
     }
   },
+  computed: {
+    ...mapGetters({
+      currentUser: "currentUser"
+    })
+  },
   methods: {
     getValidationClass(fieldName) {
       const field = this.$v.form[fieldName];
@@ -111,9 +113,15 @@ export default {
         .auth()
         .signInWithEmailAndPassword(this.form.email, this.form.password)
         .then(firebaseUser => {
+          var user = {
+            email: this.form.email,
+            password: this.form.password
+          };
+
           self.userLogged = true;
           self.sending = false;
           this.clearForm();
+          //this.$store.dispatch("user/setCurrentUser", user);
           this.$router.push("/home");
           console.log("Logado com sucesso");
         })

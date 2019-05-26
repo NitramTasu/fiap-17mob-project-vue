@@ -91,20 +91,45 @@
             <span class="md-error" v-if="!$v.form.email.required">Email obrigatório</span>
             <span class="md-error" v-else-if="!$v.form.email.email">Email inválido</span>
           </md-field>
-        </md-card-content>
 
-        <md-field :class="getValidationClass('password')">
-          <label for="password">Senha</label>
-          <md-input
-            type="password"
-            name="password"
-            id="password"
-            v-model="form.password"
-            :disabled="sending"
-          />
-          <span class="md-error" v-if="!$v.form.email.required">Campo senha obrigatório</span>
-          <span class="md-error" v-else-if="!$v.form.email.email">Senha inválida</span>
-        </md-field>
+          <md-field :class="getValidationClass('password')">
+            <label for="password">Senha</label>
+            <md-input
+              type="password"
+              name="password"
+              id="password"
+              v-model="form.password"
+              :disabled="sending"
+            />
+            <span class="md-error" v-if="!$v.form.password.required">Campo senha obrigatório</span>
+            <span class="md-error" v-else-if="!$v.form.password.password">Senha inválida</span>
+          </md-field>
+          <md-field :class="getValidationClass('zipcode')">
+            <label for="zipcode">CEP</label>
+            <md-input
+              type="number"
+              name="zipcode"
+              id="zipcode"
+              v-model="form.zipcode"
+              v-on:blur="searchAddresByZipCode(form.zipcode)"
+              :disabled="sending"
+            />
+            <span class="md-error" v-if="!$v.form.zipcode.required">Campo CEP obrigatório</span>
+            <span class="md-error" v-else-if="!$v.form.zipcode.zipcode">CEP inválido</span>
+          </md-field>
+          <md-field :class="getValidationClass('street')">
+            <label for="street">Endereço</label>
+            <md-input
+              type="text"
+              name="street"
+              id="street"
+              v-model="form.street"
+              :disabled="sending"
+            />
+            <span class="md-error" v-if="!$v.form.street.required">Campo Rua obrigatório</span>
+            <span class="md-error" v-else-if="!$v.form.street.street">Rua inválido</span>
+          </md-field>
+        </md-card-content>
 
         <md-progress-bar md-mode="indeterminate" v-if="sending"/>
 
@@ -139,7 +164,9 @@ export default {
       gender: null,
       age: null,
       password: null,
-      email: null
+      email: null,
+      zipcode: null,
+      street: null
     },
     userSaved: false,
     sending: false,
@@ -168,6 +195,13 @@ export default {
       },
       password: {
         required
+      },
+      zipcode: {
+        required,
+        maxLength: maxLength(8)
+      },
+      street: {
+        required
       }
     }
   },
@@ -181,6 +215,26 @@ export default {
         };
       }
     },
+    searchAddresByZipCode(zipcode) {
+      //TODO: Adicionar um campo de numero da residencia tb
+      console.log("entrou");
+      if (zipcode) {
+        const baseURI = `https://viacep.com.br/ws/${zipcode}/json/`;
+        this.$http.get(baseURI).then(
+          result => {
+            const data = result.data;
+            //TODO: Melhorar a exibição do endereço
+            this.form.street = `${data.logradouro}, ${data.bairro}, ${
+              data.localidade
+            } - ${data.uf}`;
+            console.log(result.data);
+          },
+          erro => {
+            console.log(erro.message);
+          }
+        );
+      }
+    },
     clearForm() {
       this.$v.$reset();
       this.form.firstName = null;
@@ -189,6 +243,8 @@ export default {
       this.form.gender = null;
       this.form.email = null;
       this.form.password = null;
+      this.form.zipcode = null;
+      this.form.street = null;
     },
     saveUser() {
       this.sending = true;
