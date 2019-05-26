@@ -147,6 +147,8 @@
 import { validationMixin } from "vuelidate";
 import firebase from "firebase/app";
 require("firebase/auth");
+
+var database = firebase.database();
 import {
   required,
   email,
@@ -217,7 +219,6 @@ export default {
     },
     searchAddresByZipCode(zipcode) {
       //TODO: Adicionar um campo de numero da residencia tb
-      console.log("entrou");
       if (zipcode) {
         const baseURI = `https://viacep.com.br/ws/${zipcode}/json/`;
         this.$http.get(baseURI).then(
@@ -227,7 +228,6 @@ export default {
             this.form.street = `${data.logradouro}, ${data.bairro}, ${
               data.localidade
             } - ${data.uf}`;
-            console.log(result.data);
           },
           erro => {
             console.log(erro.message);
@@ -253,7 +253,18 @@ export default {
         .createUserWithEmailAndPassword(this.form.email, this.form.password)
         .then(
           user => {
-            alert("Sua conta foi criada!!");
+            debugger;
+            database
+              .ref("users/" + user.uid)
+              .set({
+                nome: this.form.firstName
+              })
+              .then(() => {
+                console.log("gravou");
+              })
+              .catch(error => {
+                console.log("error: " + error);
+              });
           },
           error => {
             alert("Algo deu errado: " + error.message);
