@@ -252,12 +252,17 @@ export default {
         .auth()
         .createUserWithEmailAndPassword(this.form.email, this.form.password)
         .then(
-          user => {
+          resp => {
             debugger;
             database
-              .ref("users/" + user.uid)
+              .ref("users/" + resp.user.uid)
               .set({
-                nome: this.form.firstName
+                nome: this.form.firstName,
+                sobrenome: this.form.lastName,
+                sexo: this.form.gender,
+                idade: this.form.age,
+                cep: this.form.zipcode,
+                endereco: this.form.street
               })
               .then(() => {
                 console.log("gravou");
