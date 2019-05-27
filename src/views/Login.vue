@@ -121,7 +121,7 @@ export default {
           self.userLogged = true;
           self.sending = false;
           this.clearForm();
-          //this.$store.dispatch("user/setCurrentUser", user);
+          this.$store.dispatch("user/setCurrentUser", user);
           this.$router.push("/home");
           console.log("Logado com sucesso");
         })
