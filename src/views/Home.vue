@@ -1,22 +1,18 @@
 <template>
   <div class="home">
-    <!-- <Search/> -->
-    <!-- <counter/> -->
+    <Search/>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
 import HelloWorld from "@/components/HelloWorld.vue";
-// import Search from "@/components/Search.vue";
-// import counter from "@/components/Counter.vue";
+import Search from "@/components/Search.vue";
 
 export default {
   name: "home",
   components: {
-    HelloWorld,
-    // Search,
-    // counter
+    Search,
   }
 };
 </script>
