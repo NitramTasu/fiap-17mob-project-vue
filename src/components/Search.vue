@@ -7,9 +7,15 @@
       </md-field>
       <md-button class="md-raised" v-on:click="search">Buscar</md-button>
     </md-card>
-    <md-list>
+    <md-list class="md-double-line">
       <md-list-item v-for="repo in repositories">
-        <span class="md-list-item-text">{{repo.name}}</span>
+        <div class="md-list-item-text">
+          <span>{{repo.name}}</span>
+          <span>Estrelas:{{repo.stargazers_count}}</span>
+          <span>
+            <md-button :href="getURL(repo.full_name)" class="md-raised md-primary">Acesse Aqui</md-button>
+          </span>
+        </div>
       </md-list-item>
     </md-list>
   </div>
@@ -40,6 +46,9 @@ export default {
           console.log(erro.message);
         }
       );
+    },
+    getURL(full_name) {
+      return "https://github.com/" + full_name;
     }
   }
 };
@@ -69,6 +78,8 @@ a {
   max-width: 100%;
   display: inline-block;
   vertical-align: top;
+  align-self: center;
+  margin-top: 20px;
   border: 1px solid rgba(#000, 0.12);
 }
 .md-list-item {
@@ -80,5 +91,16 @@ a {
 }
 .md-list-item-text {
   align-items: center;
+}
+.md-card {
+  align-self: center;
+}
+
+.access-link {
+  margin-left: 0px;
+}
+.md-primary {
+  text-align: center;
+  margin: 20px
 }
 </style>
