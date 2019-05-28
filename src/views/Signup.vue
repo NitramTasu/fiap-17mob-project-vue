@@ -118,7 +118,7 @@
             <span class="md-error" v-else-if="!$v.form.zipcode.zipcode">CEP inválido</span>
           </md-field>
           <md-field :class="getValidationClass('street')">
-            <label for="street">Endereço</label>
+            <label for="street">Rua</label>
             <md-input
               type="text"
               name="street"
@@ -128,6 +128,54 @@
             />
             <span class="md-error" v-if="!$v.form.street.required">Campo Rua obrigatório</span>
             <span class="md-error" v-else-if="!$v.form.street.street">Rua inválido</span>
+          </md-field>
+          <md-field :class="getValidationClass('neighborhood')">
+            <label for="neighborhood">Bairro</label>
+            <md-input
+              type="text"
+              name="neighborhood"
+              id="neighborhood"
+              v-model="form.neighborhood"
+              :disabled="sending"
+            />
+            <span class="md-error" v-if="!$v.form.neighborhood.required">Campo Bairro obrigatório</span>
+            <span class="md-error" v-else-if="!$v.form.neighborhood.neighborhood">Bairro inválido</span>
+          </md-field>
+          <md-field :class="getValidationClass('city')">
+            <label for="city">Cidade</label>
+            <md-input
+              type="text"
+              name="city"
+              id="city"
+              v-model="form.city"
+              :disabled="sending"
+            />
+            <span class="md-error" v-if="!$v.form.city.required">Campo Cidade obrigatório</span>
+            <span class="md-error" v-else-if="!$v.form.city.city">Cidade inválido</span>
+          </md-field>
+          <md-field :class="getValidationClass('uf')">
+            <label for="uf">Estado</label>
+            <md-input
+              type="text"
+              name="uf"
+              id="uf"
+              v-model="form.uf"
+              :disabled="sending"
+            />
+            <span class="md-error" v-if="!$v.form.uf.required">Campo Estado obrigatório</span>
+            <span class="md-error" v-else-if="!$v.form.uf.uf">Estado inválido</span>
+          </md-field>
+          <md-field :class="getValidationClass('numberAd')">
+            <label for="numberAd">Número</label>
+            <md-input
+              type="text"
+              name="numberAd"
+              id="numberAd"
+              v-model="form.numberAd"
+              :disabled="sending"
+            />
+            <span class="md-error" v-if="!$v.form.numberAd.required">Campo Número do Endereço obrigatório</span>
+            <span class="md-error" v-else-if="!$v.form.numberAd.numberAd">Número do Endereço inválido</span>
           </md-field>
         </md-card-content>
 
@@ -168,7 +216,11 @@ export default {
       password: null,
       email: null,
       zipcode: null,
-      street: null
+      street: null,
+      neighborhood: null,
+      city: null,
+      uf: null,
+      numberAd: null,
     },
     userSaved: false,
     sending: false,
@@ -204,6 +256,18 @@ export default {
       },
       street: {
         required
+      },
+      neighborhood: {
+        required
+      },
+      city: {
+        required
+      },
+      uf: {
+        required
+      },
+      numberAd: {
+        required
       }
     }
   },
@@ -225,9 +289,10 @@ export default {
           result => {
             const data = result.data;
             //TODO: Melhorar a exibição do endereço
-            this.form.street = `${data.logradouro}, ${data.bairro}, ${
-              data.localidade
-            } - ${data.uf}`;
+            this.form.street = data.logradouro;
+            this.form.neighborhood = data.bairro;
+            this.form.city = data.localidade;
+            this.form.uf = data.uf;
           },
           erro => {
             console.log(erro.message);
@@ -245,6 +310,9 @@ export default {
       this.form.password = null;
       this.form.zipcode = null;
       this.form.street = null;
+      this.form.neighborhood = null;
+      this.form.city = null;
+      this.form.numberAd = null;
     },
     saveUser() {
       this.sending = true;
@@ -253,16 +321,19 @@ export default {
         .createUserWithEmailAndPassword(this.form.email, this.form.password)
         .then(
           resp => {
-            debugger;
             database
               .ref("users/" + resp.user.uid)
               .set({
+
                 nome: this.form.firstName,
                 sobrenome: this.form.lastName,
                 sexo: this.form.gender,
                 idade: this.form.age,
                 cep: this.form.zipcode,
-                endereco: this.form.street
+                endereco: this.form.street,
+                bairro: this.form.neighborhood,
+                cidade: this.form.city,
+                numero: this.form.numberAd
               })
               .then(() => {
                 console.log("gravou");
