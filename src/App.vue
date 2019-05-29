@@ -1,5 +1,13 @@
 <template>
   <div id="app">
+    <offline @detected-condition="handleConnectivityChange">
+      <div slot="online" class="online">
+        <p>Online</p>
+      </div>
+      <div slot="offline" class="offline">
+        <p>Offline</p>
+      </div>
+    </offline>
     <div id="nav">
       <router-link to="/">Home</router-link>|
       <router-link to="/about">About</router-link>|
@@ -11,9 +19,13 @@
 <script>
 import firebase from "firebase";
 import { Script } from "vm";
+import offline from 'v-offline';
 
 export default {
   name: "app",
+  components: {
+    offline
+  },
   methods: {
     logout: function() {
       firebase
@@ -22,6 +34,9 @@ export default {
         .then(() => {
           this.$router.push("/login");
         });
+    },
+    handleConnectivityChange(status) {
+      console.log(status);
     }
   }
 };
@@ -52,5 +67,14 @@ button {
 
 #nav a.router-link-exact-active {
   color: #42b983;
+}
+
+.online{
+    background-color: green;
+    color: white;
+}
+.offline{
+    background-color: red;
+    color: white;
 }
 </style>
